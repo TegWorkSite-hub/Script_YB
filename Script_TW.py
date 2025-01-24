@@ -2,21 +2,21 @@ import yt_dlp
 
 def descargar_audio(url):
     try:
-        # Configuración para solo audio
+        # Configuración de yt-dlp para descargar solo el audio
         ydl_opts = {
             'format': 'bestaudio/best',  # Selecciona el mejor audio disponible
             'postprocessors': [{
                 'key': 'FFmpegAudioConvertor',  # Usar FFmpeg para convertir el audio
-                'preferredcodec': 'mp3',  # Formato de salida: mp3
-                'preferredquality': '192',  # Calidad del audio
+                'preferredcodec': 'mp3',  # Convertir a mp3
+                'preferredquality': '192',  # Calidad del mp3
             }],
-            'outtmpl': '%(title)s.%(ext)s',  # Nombre del archivo: título del video
+            'outtmpl': '%(title)s.%(ext)s',  # Nombre del archivo basado en el título del video
         }
 
-        # Descargar el audio
+        # Descargar el audio utilizando yt-dlp
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
-        
+
         print("¡Descarga completa!")
 
     except Exception as e:
