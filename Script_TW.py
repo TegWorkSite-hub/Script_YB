@@ -1,31 +1,21 @@
-import yt_dlp
+from pytube import YouTube
 
-def download_audio(url, download_path='./'):
-    # Definir las opciones para yt-dlp
-    ydl_opts = {
-        'format': 'bestaudio/best',  # Descargar solo el mejor audio disponible
-        'outtmpl': f'{download_path}%(title)s.%(ext)s',  # Nombre del archivo de salida
-        'postprocessors': [{
-            'key': 'FFmpegAudioConvertor',  # Usamos FFmpeg para convertir el audio
-            'preferredcodec': 'mp3',        # Convertimos a MP3
-            'preferredquality': '192',      # Calidad del MP3
-        }],
-        'postprocessor_args': [
-            '-strict', '-2'  # Esto ayuda en algunos casos para evitar problemas con ffmpeg
-        ],
-    }
-
+def descargar_audio(url):
     try:
-        # Intentamos descargar el audio
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
-        print("¡Descarga completada con éxito!")
+        # Crear un objeto YouTube
+        yt = YouTube(url)
+        
+        # Seleccionar el stream de audio de más alta calidad
+        stream = yt.streams.filter(only_audio=True).first()
+        
+        # Descargar el archivo de audio
+        print(f"Descargando {yt.title}...")
+        stream.download(filename=f"{yt.title}.mp4")  # Puedes cambiar el nombre del archivo si lo deseas
+        print("¡Descarga completa!")
+    
     except Exception as e:
-        print(f"Se produjo un error: {e}")
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
     url = input("Introduce la URL del video de YouTube: ")
-    if url:  # Verifica si la URL no está vacía
-        download_audio(url)
-    else:
-        print("Por favor, ingresa una URL válida.")
+    descargar_audio(url)
