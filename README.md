@@ -49,5 +49,5 @@ cd Script_TW
 chmod +x Script_TW.py
 ```
 ```bash
-python3 Script_YB.py
+python3 Script_TW.py
 ```
