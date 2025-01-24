@@ -1,23 +1,25 @@
-import os as _0, sys as _1, subprocess as _2
-def _3(_4, _5='./'):
-    import yt_dlp as _6
-    # Cambiar el formato a 'bestaudio' y el postprocesamiento a mp3
-    _7 = {
-        'format': 'bestaudio/best',  # Esto selecciona el mejor audio disponible
-        'outtmpl': f'{_5}%(title)s.%(ext)s',
+import yt_dlp
+
+def download_audio(url):
+    # Definir las opciones para yt-dlp
+    ydl_opts = {
+        'format': 'bestaudio/best',  # Descargar el mejor audio disponible
+        'outtmpl': '%(title)s.%(ext)s',  # Nombre del archivo de salida
         'postprocessors': [{
-            'key': 'FFmpegAudioConvertor',  # Usamos FFmpeg para convertir el audio
-            'preferredcodec': 'mp3',        # Especificamos que queremos el formato mp3
-            'preferredquality': '192',      # Calidad del audio (puedes ajustarlo si lo deseas)
-        }]
+            'key': 'FFmpegAudioConvertor',  # Convertir el audio
+            'preferredcodec': 'mp3',        # Convertir a mp3
+            'preferredquality': '192',      # Calidad del mp3
+        }],
     }
-    with _6.YoutubeDL(_7) as _8:
-        _8.download([_4])
+
+    # Intentar descargar el audio
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+        print("¡Descarga completada!")
+    except Exception as e:
+        print(f"Se produjo un error: {e}")
 
 if __name__ == "__main__":
-    import base64 as _9
-    _a = _9.b64decode("YnlTdXByZW0tVFg==").decode("utf-8")
-    print(_a)
-    
-    _b = input("Introduce la URL: ")
-    _3(_b)
+    url = input("Introduce la URL del video de YouTube: ")
+    download_audio(url)
